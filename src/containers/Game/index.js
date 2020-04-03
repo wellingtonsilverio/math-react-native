@@ -21,7 +21,7 @@ export default function Game() {
   const selectEquation = async () => {
     const numbers = [];
 
-    const maxNumber = Math.round(`${Math.floor(points)}`.length / 4);
+    const maxNumber = Math.round(`${Math.floor(points)}`.length / 2);
 
     if (points < 1000) {
       numbers[2] = 1;
@@ -34,10 +34,10 @@ export default function Game() {
     }
 
     const decimal =
-      maxNumber - (numbers[2] - 1) > 4 ? 4 : maxNumber - (numbers[2] - 1);
+      maxNumber - (numbers[2] - 1) > 3 ? 3 : maxNumber - (numbers[2] - 1);
 
-    numbers[0] = Math.round(Math.random() * 10 ** decimal);
-    numbers[1] = Math.round(Math.random() * 10 ** decimal);
+    numbers[0] = Math.round(Math.random() * 10 ** decimal + 1);
+    numbers[1] = Math.round(Math.random() * 10 ** decimal + 1);
 
     if (numbers[0] === 0 && numbers[1] === 0) {
       selectEquation();
@@ -45,6 +45,11 @@ export default function Game() {
     }
 
     if (numbers[2] === 2) {
+      if (numbers[0] === numbers[1]) {
+        selectEquation();
+        return;
+      }
+
       if (numbers[0] < numbers[1]) {
         const tmp = numbers[0];
         numbers[0] = numbers[1];
@@ -100,7 +105,11 @@ export default function Game() {
     } else {
       if (response === result) {
         setPoints(points => {
-          return points + (((limitTime - timer) / 100) * (points + 1)) / 2;
+          return (
+            points +
+            (limitTime - timer) +
+            (limitTime - timer) * (points / 10000)
+          );
         });
       } else {
         loseTurn();
@@ -164,12 +173,14 @@ export default function Game() {
                 borderRadius: 8,
               },
             ]}>
-            <Text style={[styles.text, {fontSize: 52}]}>{display}</Text>
+            <Text style={[styles.text, {fontSize: 52}]}>
+              {chances > 0 ? display : ''}
+            </Text>
           </View>
         </View>
         <View style={[styles.col, styles.button, {flex: 5}]}>
           <TouchableOpacity
-            onPress={() => (chances === 0 ? initGame() : initGame())}
+            onPress={() => (chances <= 0 ? initGame() : {})}
             style={[styles.buttonContain, {borderRadius: 8}]}>
             <Text style={[styles.text, styles.buttonText]}>
               {chances > 0 ? chances : 'começar'}
