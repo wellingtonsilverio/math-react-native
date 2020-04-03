@@ -19,7 +19,7 @@ export default function Game() {
         </View>
         <View style={[styles.col, styles.button, {flex: 5}]}>
           <TouchableOpacity style={styles.buttonContain}>
-            <Text style={styles.buttonText}>Começar</Text>
+            <Text style={styles.buttonText}>começar</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -91,7 +91,7 @@ export default function Game() {
           </View>
           <View style={[styles.col, styles.button]}>
             <TouchableOpacity style={styles.buttonContain}>
-              <Text style={styles.buttonText}>Del</Text>
+              <Text style={styles.buttonText}>del</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -104,7 +104,7 @@ export default function Game() {
           <View
             style={[styles.col, styles.button, {flex: 3 / 4, paddingLeft: 0}]}>
             <TouchableOpacity style={styles.buttonContain}>
-              <Text style={styles.buttonText}>Pular</Text>
+              <Text style={styles.buttonText}>pular</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -141,6 +141,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#3E7F4C',
   },
   buttonText: {
+    // fontFamily: 'ComicNeue',
+    fontFamily: 'KGWhYYouGoTtABeSoMeAn',
     fontSize: 24,
 
     color: '#EDF3EE',
