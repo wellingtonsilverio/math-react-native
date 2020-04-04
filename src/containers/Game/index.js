@@ -136,6 +136,7 @@ export default function Game() {
   const gameOver = () => {
     setDisplay('');
     setChances(0);
+    setPoints(0);
     setAnswer(0);
     setResult(0);
   };
@@ -303,18 +304,20 @@ export default function Game() {
         </View>
       </View>
       <View style={styles.col}>
-        <Text style={[styles.text, {fontSize: 24}]}>
-          {answer > 0 ? `Resposta: ${answer}` : ''}
-        </Text>
-      </View>
-      <View style={styles.row}>
-        <Text style={[styles.text, {fontSize: 24}]}>
-          {points > 0 ? Math.floor(points) : ''}
-        </Text>
-        <Text
-          style={[styles.text, {fontSize: 12, marginTop: 12, marginLeft: 4}]}>
-          {points > 0 ? `Pontos` : ''}
-        </Text>
+        <View style={styles.col}>
+          <Text style={[styles.text, {fontSize: 24}]}>
+            {answer > 0 ? `Resposta: ${answer}` : ''}
+          </Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={[styles.text, {fontSize: 24}]}>
+            {points > 0 ? Math.floor(points) : ''}
+          </Text>
+          <Text
+            style={[styles.text, {fontSize: 12, marginTop: 12, marginLeft: 4}]}>
+            {points > 0 ? `Pontos` : ''}
+          </Text>
+        </View>
       </View>
     </View>
   );
