@@ -69,13 +69,13 @@ function MyTabBar({state, descriptors, navigation}) {
             <FontAwesomeIcon
               icon={icon}
               size={28}
-              color={isFocused ? '#0C180E' : '#060C07'}
+              color={isFocused ? '#94D27B' : '#B8E1A7'}
               style={{marginBottom: 2}}
             />
             <Text
               style={[
                 styles.text,
-                {fontSize: 16, color: isFocused ? '#0C180E' : '#060C07'},
+                {fontSize: 16, color: isFocused ? '#94D27B' : '#B8E1A7'},
               ]}>
               {String(label).toLowerCase()}
             </Text>
@@ -88,7 +88,7 @@ function MyTabBar({state, descriptors, navigation}) {
 
 function MyTabs() {
   return (
-    <Tab.Navigator tabBar={props => <MyTabBar {...props} />}>
+    <Tab.Navigator tabBar={(props) => <MyTabBar {...props} />}>
       <Tab.Screen
         name="Game"
         component={Game}

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default function Game() {
   const limitTime = 300;
@@ -12,6 +13,20 @@ export default function Game() {
   const [result, setResult] = useState(0);
   const [answer, setAnswer] = useState(0);
   const [timer, setTimer] = useState(0);
+  const [record, setRecord] = useState(0);
+
+  useEffect(() => {
+    getLastRecord();
+  }, []);
+
+  const getLastRecord = async () => {
+    const recordInStorage = await AsyncStorage.getItem('record');
+
+    console.log('recordInStorage', recordInStorage);
+    if (recordInStorage) {
+      setRecord(parseInt(recordInStorage));
+    }
+  };
 
   const initGame = async () => {
     selectEquation();
@@ -93,7 +108,7 @@ export default function Game() {
     );
   };
 
-  const reply = number => {
+  const reply = (number) => {
     if (!(result && result > 0)) {
       return;
     }
@@ -104,7 +119,7 @@ export default function Game() {
       setAnswer(response);
     } else {
       if (response === result) {
-        setPoints(points => {
+        setPoints((points) => {
           return (
             points +
             (limitTime - timer) +
@@ -130,10 +145,15 @@ export default function Game() {
       return;
     }
 
-    setChances(chances => chances - 1);
+    setChances((chances) => chances - 1);
   };
 
   const gameOver = () => {
+    if (points > record) {
+      AsyncStorage.setItem('record', `${points}`);
+
+      setRecord(points);
+    }
     setDisplay('');
     setChances(0);
     setPoints(0);
@@ -150,7 +170,7 @@ export default function Game() {
         loseTurn();
       } else {
         interval = setInterval(() => {
-          setTimer(timer => timer + 1);
+          setTimer((timer) => timer + 1);
         }, 100);
       }
     } else if (chances < 0 && timer !== 0) {
@@ -163,7 +183,7 @@ export default function Game() {
 
   return (
     <View style={[styles.col, {backgroundColor: '#F3FCF0'}]}>
-      <View style={[styles.row, {flex: 1, padding: 7, maxHeight: 140}]}>
+      <View style={[styles.row, {flex: 2, padding: 7, maxHeight: 120}]}>
         <View style={[styles.col, {flex: 8, padding: 8}]}>
           <View
             style={[
@@ -174,8 +194,19 @@ export default function Game() {
                 borderRadius: 8,
               },
             ]}>
-            <Text style={[styles.text, {fontSize: 52}]}>
+            <Text style={[styles.text, {fontSize: 52, color: '#0C180ECC'}]}>
               {chances > 0 ? display : ''}
+            </Text>
+            <Text
+              style={[
+                styles.text,
+                {
+                  fontSize: 16,
+                  color: '#0C180ECC',
+                  marginTop: -8,
+                },
+              ]}>
+              {answer > 0 ? `${answer}` : ''}
             </Text>
           </View>
         </View>
@@ -202,7 +233,7 @@ export default function Game() {
         <View style={{flex: limitTime - timer, backgroundColor: 'red'}}></View>
         <View style={{flex: timer}}></View>
       </View>
-      <View style={[styles.col, {flex: 4, maxHeight: 380}]}>
+      <View style={[styles.col, {flex: 6, maxHeight: 380}]}>
         <View style={[styles.row, {marginTop: 8}]}>
           <View style={[styles.col, styles.button]}>
             <TouchableOpacity
@@ -296,7 +327,7 @@ export default function Game() {
           <View
             style={[styles.col, styles.button, {flex: 3 / 4, paddingLeft: 0}]}>
             <TouchableOpacity
-              style={[styles.buttonContain, {backgroundColor: '#EFA647'}]}
+              style={[styles.buttonContain, {backgroundColor: '#D64952'}]}
               onPress={() => skip()}>
               <Text style={[styles.text, styles.buttonText]}>pular</Text>
             </TouchableOpacity>
@@ -304,19 +335,38 @@ export default function Game() {
         </View>
       </View>
       <View style={styles.col}>
-        <View style={styles.col}>
-          <Text style={[styles.text, {fontSize: 24}]}>
-            {answer > 0 ? `Resposta: ${answer}` : ''}
-          </Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={[styles.text, {fontSize: 24}]}>
-            {points > 0 ? Math.floor(points) : ''}
-          </Text>
-          <Text
-            style={[styles.text, {fontSize: 12, marginTop: 12, marginLeft: 4}]}>
-            {points > 0 ? `Pontos` : ''}
-          </Text>
+        <View
+          style={[
+            styles.row,
+            {
+              flex: 0,
+              alignItems: 'flex-end',
+              borderRadius: 16,
+
+              padding: 16,
+
+              marginHorizontal: 32,
+              marginVertical: 8,
+
+              backgroundColor: '#DA9741',
+            },
+          ]}>
+          <View style={styles.col}>
+            <Text style={[styles.text, {fontSize: 24}]}>
+              {points > 0 ? Math.floor(points) : 0}
+            </Text>
+            <Text style={[styles.text, {fontSize: 12, marginTop: 8}]}>
+              {`pontuação atual`}
+            </Text>
+          </View>
+          <View style={styles.col}>
+            <Text style={[styles.text, {fontSize: 36}]}>
+              {record > 0 ? Math.floor(record) : 0}
+            </Text>
+            <Text style={[styles.text, {fontSize: 16, marginTop: 4}]}>
+              {`melhor pontuação`}
+            </Text>
+          </View>
         </View>
       </View>
     </View>
@@ -359,5 +409,7 @@ const styles = StyleSheet.create({
   text: {
     // fontFamily: 'ComicNeue-Bold',
     fontFamily: 'KGWhYYouGoTtABeSoMeAn',
+
+    color: '#EDF3EE',
   },
 });
